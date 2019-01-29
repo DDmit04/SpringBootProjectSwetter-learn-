@@ -1,7 +1,10 @@
 package com.example.sweater.controller;
 
+import com.example.sweater.domain.Message;
 import com.example.sweater.domain.Role;
 import com.example.sweater.domain.User;
+import com.example.sweater.repos.MessageRepo;
+import com.example.sweater.repos.UserRepo;
 import com.example.sweater.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,11 +13,16 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -24,6 +32,12 @@ public class UserController {
 	
     @Autowired
     private UserSevice userSevice;
+    
+    @Autowired
+	private UserRepo userRepo;
+    
+    @Autowired
+	private MessageRepo messageRepo;
     
     @Autowired
 	private PasswordEncoder passwordEncoder;
@@ -165,6 +179,22 @@ public class UserController {
 			model.addAttribute("users", user.getSubscribers());
 		}
     	return "subscriptions";
+    }
+    
+    @GetMapping("subMessages/{user}")
+    public String subMessages(
+    		@PathVariable User user,
+    		Model model) {
+		Iterable<Message> messagesRepo = messageRepo.findAll();
+		Iterator<Message> iterator = messagesRepo.iterator();
+		while (iterator.hasNext()) {
+			Message message = iterator.next();
+			if (!user.getSubscriptions().contains(message.getAuthor())) {
+				iterator.remove();
+			}
+		}
+		model.addAttribute("messages", messagesRepo);
+    	return "subscriptionsMessages";
     }
     
 }
