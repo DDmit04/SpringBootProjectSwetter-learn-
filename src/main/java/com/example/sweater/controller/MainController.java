@@ -74,6 +74,8 @@ public class MainController {
 		if(StringUtils.isEmpty(message.getTag())) {
 			message.setTag("no tag");
 		}
+		Iterable<Message> messages = messageRepo.findAll();
+		model.addAttribute("messages", messages);
 		return bindingResult.hasErrors() ? "/main" : "redirect:/main";
 	}
 }

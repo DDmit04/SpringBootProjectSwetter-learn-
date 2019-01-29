@@ -6,7 +6,6 @@ import com.example.sweater.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.config.authentication.UserServiceBeanDefinitionParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -37,69 +36,8 @@ public class RegistrationController {
 //	@Autowired
 //	private RestTemplate restTemplate;
 
-	@Value("${recaptcha.secret}")
-	private String secret;
-	
-	@GetMapping("/passwordRecoverSt2/{username}")
-	public String passwordRecover2(@PathVariable String username) {
-		return "resetPasswordSt2";
-	}
-	
-	@PostMapping("/passwordRecover2/{username}")
-	public String recoverPassword2(@PathVariable String username, 
-								   @RequestParam String key,
-								   @RequestParam("password2") String passwordConfirm, 
-								   @RequestParam String password,
-								   @RequestParam String button, 
-								   Model model) {
-		User user = userRepo.findByUsername(username);
-		if (!user.getActivationCode().equals(key)) {
-			model.addAttribute("keyError", "wrong key!");
-		}
-		if (StringUtils.isEmpty(password)) {
-			model.addAttribute("PasswordError", "password can not be empty!");
-		}
-		if (!passwordConfirm.equals(password)) {
-			model.addAttribute("passwordError", "Passwords are different!");
-		}
-		if (StringUtils.isEmpty(passwordConfirm)) {
-			model.addAttribute("password2Error", "Password confirmation can not be empty!");
-		}
-		if (!user.getActivationCode().equals(key) || StringUtils.isEmpty(password)
-				|| StringUtils.isEmpty(passwordConfirm) || !passwordConfirm.equals(password)) {
-			return "resetPassword2";
-		}
-		userSevice.updateProfilePassword(user, password);
-		userSevice.activateUser(user.getActivationCode());
-		return "login";
-	}
-	
-	@GetMapping("/passwordRecover")
-	public String passwordRecover() {
-		return "resetPassword";
-	}
-	
-	
-	@PostMapping("/passwordRecover")
-	public String recoverPassword(@RequestParam String username, 
-								  Model model) {
-		if (StringUtils.isEmpty(username)) {
-			model.addAttribute("usernameError", "username can not be emty!");
-			return "resetPassword";
-		}
-		User user = userRepo.findByUsername(username);
-		if(user == null) {
-			model.addAttribute("usernameError", "User not exist!");
-			return "resetPassword";
-		}
-		if (user.getActivationCode() != null) {
-			model.addAttribute("usernameError", "You already have a key or have not activated your account!");
-			return "resetPassword";
-		}
-		userSevice.sendMessageToChange(user, "password");
-		return "redirect:/passwordRecover2/" + username;
-	}
-	
+//	@Value("${recaptcha.secret}")
+//	private String secret;
 
 	@GetMapping("/registration")
 	public String registration() {

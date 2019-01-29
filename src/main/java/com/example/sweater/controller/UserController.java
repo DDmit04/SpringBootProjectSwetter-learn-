@@ -5,6 +5,7 @@ import com.example.sweater.domain.User;
 import com.example.sweater.service.UserSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.authentication.UserServiceBeanDefinitionParser;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -112,7 +113,7 @@ public class UserController {
     ) {
     	boolean isConfirEmpty = StringUtils.isEmpty(passwordConfirm);
     	boolean isMainPasswordEmpty = StringUtils.isEmpty(currentPassword);
-    	boolean isMainPasswordCorrect = passwordEncoder.matches(currentPassword, user.getPassword());
+    	boolean isMainPasswordCorrect = passwordEncoder.matches(currentPassword, usr.getPassword());
     	if (isMainPasswordEmpty) {
 			model.addAttribute("currentPasswordError", "Current password can not be empty!");
 		}
@@ -134,4 +135,36 @@ public class UserController {
         model.addAttribute("message", "Your data seccesfuly apdated!");
         return "profile";
     }
+    
+    @GetMapping("subscribe/{user}")
+    public String subscribe(
+    		@AuthenticationPrincipal User currentUser,
+    		@PathVariable User user) {
+    	userSevice.subscribe(currentUser, user);
+    	return "redirect:/user-messages/" + user.getId();
+    }
+    
+    @GetMapping("unsubscribe/{user}")
+    public String unsubscribe(
+    		@AuthenticationPrincipal User currentUser,
+    		@PathVariable User user) {
+    	userSevice.unSubscribe(currentUser, user);
+    	return "redirect:/user-messages/" + user.getId();
+    }
+    
+    @GetMapping("{type}/{user}/list")
+    public String userListType(
+    		@PathVariable String type,
+    		@PathVariable User user,
+    		Model model) {
+		model.addAttribute("userChannel", user);
+    	model.addAttribute("type", type);
+		if("subscriptions".equals(type)) {
+			model.addAttribute("users", user.getSubscriptions());
+		} else {
+			model.addAttribute("users", user.getSubscribers());
+		}
+    	return "subscriptions";
+    }
+    
 }

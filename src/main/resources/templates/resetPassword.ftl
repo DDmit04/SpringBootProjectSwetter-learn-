@@ -11,8 +11,8 @@
 		<div class="col-sm-6 form-inline">
 			<input type="text" name="username" class="form-control ${(usernameError??)?string('is-invalid', '')}" placeholder="Enter your username" />
 			<button type="submit" name="button" class="btn btn-primary ml-2">Send key</button>
-			<#if usernameError??>
-		    	<div class="invalid-feedback">${usernameError}</div>
+			<#if keyError??>
+		    	<div class="invalid-feedback">${keyError}</div>
 			</#if>
 		</div>
 	</div>

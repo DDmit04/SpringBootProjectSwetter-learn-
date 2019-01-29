@@ -67,10 +67,17 @@ public class UserSevice implements UserDetailsService {
 	}
 	
 	public void sendMessageToChange(User user, String target) {
-		user.setActivationCode(UUID.randomUUID().toString());
+		String code = UUID.randomUUID().toString();
+		if(target.equals("email")) {
+			user.setActivationCode(code);
+		}
+		if(target.equals("password")) {
+			user.setPasswordResetCode(code);
+		}
 		String message = String.format(
 				"Hello, %s! \n" + "this is your key to change " + target + ": %s",
-				user.getUsername(), user.getActivationCode());
+				user.getUsername(), 
+				target.equals("email") ? user.getActivationCode() : user.getPasswordResetCode());
 		mailSender.send(user.getEmail(), "Change email", message);
 	}
 
@@ -80,6 +87,16 @@ public class UserSevice implements UserDetailsService {
 			return false;
 		}
 		user.setActivationCode(null);
+		userRepo.save(user);
+		return true;
+	}
+	
+	public boolean activatePassword(String code) {
+		User user = userRepo.findByPasswordResetCode(code);
+		if (user == null) {
+			return false;
+		}
+		user.setPasswordResetCode(null);
 		userRepo.save(user);
 		return true;
 	}
@@ -114,6 +131,16 @@ public class UserSevice implements UserDetailsService {
 		user.setActivationCode(UUID.randomUUID().toString());
 		userRepo.save(user);
 		sendMessageToActivate(user);
+	}
+
+	public void subscribe(User currentUser, User user) {
+		user.getSubscribers().add(currentUser);
+		userRepo.save(user);
+	}
+
+	public void unSubscribe(User currentUser, User user) {
+		user.getSubscribers().remove(currentUser);
+		userRepo.save(user);
 	}
 	
 }
