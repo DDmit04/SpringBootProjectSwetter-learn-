@@ -39,10 +39,10 @@
         </div>
     </div>
     </#if>
+    <button class="btn btn-primary mr-2" type="submit"><#if isRegisterForm>Create<#else>Sign In</#if></button>
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
-    <#if !isRegisterForm><a href="/registration">Add new user</a></#if>
+    <#if !isRegisterForm><a class="mr-2" href="/registration">Add new user</a></#if>
     <#if !isRegisterForm><a href="/passwordRecover">Forgot password?</a></#if>
-    <button class="btn btn-primary" type="submit"><#if isRegisterForm>Create<#else>Sign In</#if></button>
 </form>
 </#macro>
 

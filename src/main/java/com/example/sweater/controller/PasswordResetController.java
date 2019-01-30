@@ -76,7 +76,7 @@ public class PasswordResetController {
 			return "resetPassword";
 		}
 		if(user.getActivationCode() != null) {
-			model.addAttribute("keyError", "You have not activated your account!");
+			model.addAttribute("usernameError", "You have not activated your account!");
 			return "resetPassword";
 		}
 		userSevice.sendMessageToChange(user, "password");
