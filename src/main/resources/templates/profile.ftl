@@ -50,7 +50,7 @@
 	<div class="form-group row">
     	<label for="staticEmail" class="col-sm-2 col-form-label">Your email:</label>
     	<div class="col-sm-10">
-        	<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="${mail}">
+        	<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="${user.email}">
     	</div>
     </div>
 	<a class="btn btn-primary" href="/user/changeEmail" role="button">change email</a>

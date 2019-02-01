@@ -1,10 +1,7 @@
 <#include "security.ftl">
 
-<#if redirectMessage?? && redirectMessage != "">
-    <div class="alert alert-${redirectMessageType}" role="alert">${redirectMessage}</div>
-</#if>
 <div class="card-columns">
-    <#list messages as message>
+    <#list pages.content as message>
     <div class="card my-3">
         <#if message.filename??>
         <img src="/img/${message.filename}" class="card-img-top">

@@ -22,16 +22,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
-@PropertySource("application.properties")
 public class RegistrationController {
 
 //	private final static String CAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";
 
 	@Autowired
 	private UserSevice userSevice;
-	
-	@Autowired
-	private UserRepo userRepo;
 
 //	@Autowired
 //	private RestTemplate restTemplate;

@@ -1,7 +1,11 @@
 <#import "parts/common.ftl" as c>
+<#import "parts/pager.ftl" as p>
 
 <@c.page>
 
+<#if redirectMessage?? && redirectMessage != "">
+    <div class="alert alert-${redirectMessageType}" role="alert">${redirectMessage}</div>
+</#if>
 <h3> ${userChannel.username}
 	<#if !isCurrentUser> 
 		<#if isSubscriber> 
@@ -22,6 +26,9 @@
 		<#include "parts/messageEdit.ftl" />
 	</div>
 </#if> 
+
+<@p.pager url pages />
 <#include "parts/messageList.ftl" />
+<@p.pager url pages />
 
 </@c.page>

@@ -1,10 +1,12 @@
 package com.example.sweater.controller;
 
 import java.io.IOException;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +25,6 @@ import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.FileService;
 
 @Controller
-@PropertySource("application.properties")
 public class MessageEditController {
 	
 	@Autowired
@@ -38,9 +39,9 @@ public class MessageEditController {
 							   @RequestParam(required = false) Message message,
 			   				   @ModelAttribute("redirectMessageName") String redirectMessage,
 			   				   @ModelAttribute("redirectMessageTypeName") String redirectMessageType,
+							   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 							   Model model) {
-		Set<Message> messages = user.getMessages();
-		model.addAttribute("messages", messages);
+		Page<Message> page = messageRepo.findByAuthor(user, pageable);
 		model.addAttribute("message", message);
 		model.addAttribute("userChannel", user);
 		model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
@@ -49,6 +50,8 @@ public class MessageEditController {
 		model.addAttribute("isCurrentUser", currentUser.equals(user));
 		model.addAttribute("redirectMessage", redirectMessage);
 		model.addAttribute("redirectMessageType", redirectMessageType);
+		model.addAttribute("url", "/user-messages/" + user.getId());
+		model.addAttribute("pages", page);
 		return "userMessages";
 	}
 	
@@ -63,25 +66,23 @@ public class MessageEditController {
 			   					@ModelAttribute("redirectMessageName") String redirectMessage,
 			   					@ModelAttribute("redirectMessageTypeName") String redirectMessageType,
 			   					RedirectAttributes redirectAttributes) throws IOException {
-		if(button.equals("edit")) {
-			if(message.getAuthor().equals(currentUser)) {
-				if(!StringUtils.isEmpty(text)) {
-					message.setText(text);
-				} else {
-					redirectMessage = "Edit error, Message can not be empty!";
-					redirectMessageType = "danger";
-					redirectAttributes.addFlashAttribute("redirectMessageTypeName", redirectMessageType);
-					redirectAttributes.addFlashAttribute("redirectMessageName", redirectMessage);
-					return "redirect:/user-messages/" + user;
-				}
-				if(!StringUtils.isEmpty(tag)) {
-					message.setTag(tag);
-				} else {
-					message.setTag("noTag");
-				}
-				fileService.saveFile(message, file);
-				messageRepo.save(message);
+		if (button.equals("edit")) {
+			if (!StringUtils.isEmpty(text)) {
+				message.setText(text);
+			} else {
+				redirectMessage = "Edit error, Message can not be empty!";
+				redirectMessageType = "danger";
+				redirectAttributes.addFlashAttribute("redirectMessageTypeName", redirectMessageType);
+				redirectAttributes.addFlashAttribute("redirectMessageName", redirectMessage);
+				return "redirect:/user-messages/" + user;
 			}
+			if (!StringUtils.isEmpty(tag)) {
+				message.setTag(tag);
+			} else {
+				message.setTag("noTag");
+			}
+			fileService.saveFile(message, file);
+			messageRepo.save(message);
 		}
 		if(button.equals("delete")) {
 			messageRepo.delete(message);

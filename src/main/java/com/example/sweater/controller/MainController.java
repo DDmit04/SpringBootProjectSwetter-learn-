@@ -6,7 +6,10 @@ import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.FileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +26,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 @Controller
-@PropertySource("application.properties")
 public class MainController {
 	
 	@Autowired
@@ -33,20 +35,22 @@ public class MainController {
 	private FileService fileService;
 
 	@GetMapping(value = {"/home", "/"})
-	public String greeting(Map<String, Object> model) {
+	public String greeting() {
 		return "greeting";
 	}
 
 	@GetMapping("/main")
 	public String main(@RequestParam(required = false, defaultValue = "") String filter, 
+					   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 			           Model model) {
-		Iterable<Message> messages = messageRepo.findAll();
+		Page<Message> page;
 		if (filter != null && !filter.isEmpty()) {
-			messages = messageRepo.findByTag(filter);
+			page = messageRepo.findByTag(filter, pageable);
 		} else {
-			messages = messageRepo.findAll();
+			page = messageRepo.findAll(pageable);
 		}
-		model.addAttribute("messages", messages);
+		model.addAttribute("url", "/main");
+		model.addAttribute("pages", page);
 		model.addAttribute("filter", filter);
 		return "main";
 	}

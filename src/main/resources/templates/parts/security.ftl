@@ -11,7 +11,6 @@
         isAdmin = user.isAdmin()
         isActive = user.isActive()
         currentUserId = user.getId()
-        mail = user.getEmail()
     >
 <#else>
     <#assign
