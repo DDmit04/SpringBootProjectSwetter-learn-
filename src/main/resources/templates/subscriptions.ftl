@@ -7,7 +7,7 @@
 <ul class="list-group">
 	<#list users as user>
   		<li class="list-group-item mt-2" >
-  			<a href="/user-messages/${user.id}">${user.getUsername()}</a>
+  			<a href="/profile/${user.id}">${user.getUsername()}</a>
   		</li>
   	<#else>
     	<h5 class="mt-2">no ${type}</h5>

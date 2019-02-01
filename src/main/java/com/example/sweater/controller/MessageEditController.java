@@ -33,7 +33,7 @@ public class MessageEditController {
 	@Autowired
 	private FileService fileService;
 	
-	@GetMapping("/user-messages/{user}")
+	@GetMapping("/profile/{user}")
 	public String userMessages(@AuthenticationPrincipal User currentUser, 
 							   @PathVariable User user,
 							   @RequestParam(required = false) Message message,
@@ -55,7 +55,7 @@ public class MessageEditController {
 		return "userMessages";
 	}
 	
-	@PostMapping("/user-messages/{user}")
+	@PostMapping("/profile/{user}")
 	public String updateMessage(@AuthenticationPrincipal User currentUser, 
 			   					@PathVariable Long user, 
 			   					@RequestParam (required = false) String button, 
@@ -74,7 +74,7 @@ public class MessageEditController {
 				redirectMessageType = "danger";
 				redirectAttributes.addFlashAttribute("redirectMessageTypeName", redirectMessageType);
 				redirectAttributes.addFlashAttribute("redirectMessageName", redirectMessage);
-				return "redirect:/user-messages/" + user;
+				return "redirect:/profile/" + user;
 			}
 			if (!StringUtils.isEmpty(tag)) {
 				message.setTag(tag);
@@ -91,7 +91,7 @@ public class MessageEditController {
 			redirectAttributes.addFlashAttribute("redirectMessageTypeName", redirectMessageType);
 			redirectAttributes.addFlashAttribute("redirectMessageName", redirectMessage);
 		} 
-		return "redirect:/user-messages/" + user;
+		return "redirect:/profile/" + user;
 	}
 
 }

@@ -60,13 +60,13 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @GetMapping("profile")
+    @GetMapping("accountSettings")
     public String getProfile(
     		@AuthenticationPrincipal User user,
     		Model model) {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
-        return "profile";
+        return "accountSettings";
     }
     
     @GetMapping("/changeEmail")
@@ -108,7 +108,7 @@ public class UserController {
     	return "changeEmail";
     }
 
-    @PostMapping("profile")
+    @PostMapping("accountSettings")
     public String updateProfilePassword(
             @AuthenticationPrincipal User user,
             @RequestParam String currentPassword,
@@ -136,10 +136,10 @@ public class UserController {
 		if (isConfirEmpty || bindingResult.hasErrors() || isMainPasswordCorrect || isMainPasswordEmpty) {
 			Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
 			model.addAllAttributes(errors);
-			return "profile";
+			return "accountSettings";
 		}
         userSevice.updateProfilePassword(user, password);    
         model.addAttribute("message", "Your data seccesfuly apdated!");
-        return "profile";
+        return "accountSettings";
     }
 }

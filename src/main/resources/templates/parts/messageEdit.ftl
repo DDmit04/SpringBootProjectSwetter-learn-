@@ -2,7 +2,7 @@
 
 <#if activationCodeError??>
 	<div class="alert alert-danger" role="alert">
-		<a class="alert-link" href="user/profile">${activationCodeError}</a>
+		<a class="alert-link" href="user/accountSettings">${activationCodeError}</a>
 	</div>
 </#if>
 <#if message?? || isMainPage>

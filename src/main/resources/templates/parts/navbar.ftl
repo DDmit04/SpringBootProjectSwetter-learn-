@@ -17,18 +17,18 @@
                 <a class="nav-link" href="/main">Messages</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/user-messages/${currentUserId}">My messages</a>
+                <a class="nav-link" href="/profile/${currentUserId}">My profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/user/profile">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/user/subMessages/${user.id}">Sub messages</a>
+                <a class="nav-link" href="/user/subMessages/${user.id}">Subscriptions</a>
             </li>
             </#if>
             <#if isAdmin>
             <li class="nav-item">
                 <a class="nav-link" href="/user">User list</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/accountSettings">Settings</a>
             </li>
             </#if>
         </ul>
