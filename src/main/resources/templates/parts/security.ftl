@@ -4,7 +4,7 @@
 
 <#if known>
     <#assign
-        isMainPage = springMacroRequestContext.requestUri?contains("/main")
+        isMessagesPage = springMacroRequestContext.requestUri?contains("/allMessages")
 		isRegistrationPage = springMacroRequestContext.requestUri?contains("/registration")
         user = Session.SPRING_SECURITY_CONTEXT.authentication.principal
         name = user.getUsername()

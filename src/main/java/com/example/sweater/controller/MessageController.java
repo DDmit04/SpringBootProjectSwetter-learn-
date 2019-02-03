@@ -50,27 +50,29 @@ public class MessageController {
 		return "greeting";
 	}
 
-	@GetMapping("/main")
+	@GetMapping("/allMessages")
 	public String main(@AuthenticationPrincipal User user, 
 					   @RequestParam(required = false, defaultValue = "") String filter, 
 					   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 			           Model model) {
 		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
-		model.addAttribute("url", "/main");
+		model.addAttribute("url", "/allMessages");
 		model.addAttribute("pages", page);
 		model.addAttribute("filter", filter);
-		return "main";
+		return "allMessages";
 	}
 
-	@PostMapping("/main")
+	@PostMapping("/allMesseges")
 	public String add(@AuthenticationPrincipal User user, 
+					  @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
+					  @RequestParam(required = false, defaultValue = "") String filter, 
 					  @Valid Message message, 
 					  BindingResult bindingResult,
 			          Model model, 
 			          @RequestParam("file") MultipartFile file) throws IOException {
 		if(user.getActivationCode() != null) {
 			model.addAttribute("activationCodeError", "You have not activated account, pleace check your Email");
-			return "/main";
+			return "allMessages";
 		}
 		message.setAuthor(user);
 		if (bindingResult.hasErrors()) {
@@ -85,9 +87,9 @@ public class MessageController {
 		if(StringUtils.isEmpty(message.getTag())) {
 			message.setTag("no tag");
 		}
-		Iterable<Message> messages = messageRepo.findAll();
-		model.addAttribute("messages", messages);
-		return bindingResult.hasErrors() ? "/main" : "redirect:/main";
+		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
+		model.addAttribute("pages", page);
+		return bindingResult.hasErrors() ? "/allMessages" : "redirect:/allMessages";
 	}
 	
 	@GetMapping("/messages/{message}/like")

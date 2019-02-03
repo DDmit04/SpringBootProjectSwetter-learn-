@@ -32,7 +32,7 @@ public class SubscribsionsController {
 			@AuthenticationPrincipal User currentUser, 
 			@PathVariable User user) {
 		userSevice.subscribe(currentUser, user);
-		return "redirect:/user-messages/" + user.getId();
+		return "redirect:/profile/" + user.getId();
 	}
 
 	@GetMapping("unsubscribe/{user}")
@@ -40,7 +40,7 @@ public class SubscribsionsController {
 			@AuthenticationPrincipal User currentUser, 
 			@PathVariable User user) {
 		userSevice.unSubscribe(currentUser, user);
-		return "redirect:/user-messages/" + user.getId();
+		return "redirect:/profile/" + user.getId();
 	}
 
 	@GetMapping("{type}/{user}/list")

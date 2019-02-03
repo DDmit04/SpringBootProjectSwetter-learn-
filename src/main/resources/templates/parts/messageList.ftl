@@ -8,7 +8,7 @@
         </#if>
         <div class="m-2">
             <span>${message.text}</span><br>
-            <i><a href="/main?filter=${message.tag}">#${message.tag}</a></i>
+            <i><a href="/allMessages?filter=${message.tag}">#${message.tag}</a></i>
         </div>
 		<div class="card-footer text-muted container">
 			<div class="row">
@@ -22,7 +22,7 @@
 					${message.likes}
 				</a>
 				<#if message.author.id== currentUserId> 
-					<a class="col btn btn-primary" href="/user-messages/${message.author.id}?message=${message.id}">
+					<a class="col btn btn-primary" href="/profile/${message.author.id}?message=${message.id}">
 						Edit 
 					</a> 
 				</#if>

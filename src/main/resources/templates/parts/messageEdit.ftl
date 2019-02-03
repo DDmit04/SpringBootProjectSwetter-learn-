@@ -5,9 +5,9 @@
 		<a class="alert-link" href="user/accountSettings">${activationCodeError}</a>
 	</div>
 </#if>
-<#if message?? || isMainPage>
+<#if message?? || isMessagesPage>
 <a class="btn btn-primary mb-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-	<#if isMainPage>
+	<#if isMessagesPage>
     	New message
 	<#else>
     	Message editor
@@ -38,13 +38,13 @@
             <input type="hidden" name="id" value="<#if message??>${message}</#if>" />
             <div class="form-group">
                 <button type="submit" name="button" value="edit" class="btn btn-primary">
-					<#if isMainPage>
+					<#if isMessagesPage>
     					add
 					<#else>
     					edit
 					</#if>
 				</button>
-				<#if !isMainPage>
+				<#if !isMessagesPage>
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">delete</button>
 					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">

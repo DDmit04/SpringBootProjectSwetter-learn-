@@ -14,13 +14,13 @@
             </li>
             <#if user?? && !isRegistrationPage>
             <li class="nav-item">
-                <a class="nav-link" href="/main">Messages</a>
+                <a class="nav-link" href="/allMessages">All Messages</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/profile/${currentUserId}">My profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/user/subMessages/${user.id}">Subscriptions</a>
+                <a class="nav-link" href="/user/subMessages/${user.id}">My Subscriptions</a>
             </li>
             </#if>
             <#if isAdmin>
