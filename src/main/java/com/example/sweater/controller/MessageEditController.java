@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
 import com.example.sweater.domain.dto.MessageDto;
+import com.example.sweater.domain.dto.GestMessageDto;
 import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.FileService;
 import com.example.sweater.service.MessageService;
@@ -46,17 +47,22 @@ public class MessageEditController {
 			   				   @ModelAttribute("redirectMessageTypeName") String redirectMessageType,
 							   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 							   Model model) {
-		Page<MessageDto> page = messageService.messageListForUser(pageable, currentUser, user);
+		if(currentUser != null) {
+			Page<MessageDto> page = messageService.messageListForUser(pageable, currentUser, user);
+			model.addAttribute("isCurrentUser", currentUser.equals(user));
+			model.addAttribute("pages", page);
+			model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser));
+		} else {
+			Page<GestMessageDto> page = messageService.messageListForGestProfile(pageable, user);
+			model.addAttribute("pages", page);
+		}
 		model.addAttribute("message", message);
 		model.addAttribute("userChannel", user);
 		model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
 		model.addAttribute("subscribersCount", user.getSubscribers().size());
-		model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser));
-		model.addAttribute("isCurrentUser", currentUser.equals(user));
 		model.addAttribute("redirectMessage", redirectMessage);
 		model.addAttribute("redirectMessageType", redirectMessageType);
 		model.addAttribute("url", "/user-messages/" + user.getId());
-		model.addAttribute("pages", page);
 		return "userMessages";
 	}
 	

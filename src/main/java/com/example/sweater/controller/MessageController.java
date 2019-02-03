@@ -3,6 +3,7 @@ package com.example.sweater.controller;
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
 import com.example.sweater.domain.dto.MessageDto;
+import com.example.sweater.domain.dto.GestMessageDto;
 import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.FileService;
 import com.example.sweater.service.MessageService;
@@ -55,14 +56,19 @@ public class MessageController {
 					   @RequestParam(required = false, defaultValue = "") String filter, 
 					   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 			           Model model) {
-		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
+		if(user != null) {
+			Page<MessageDto> page = messageService.messageList(pageable, filter, user);
+			model.addAttribute("pages", page);
+		} else {
+			Page<GestMessageDto> pageGest = messageService.messageListForGest(pageable, filter);
+			model.addAttribute("pages", pageGest);
+		}
 		model.addAttribute("url", "/allMessages");
-		model.addAttribute("pages", page);
 		model.addAttribute("filter", filter);
 		return "allMessages";
 	}
 
-	@PostMapping("/allMesseges")
+	@PostMapping("/allMessages")
 	public String add(@AuthenticationPrincipal User user, 
 					  @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 					  @RequestParam(required = false, defaultValue = "") String filter, 
@@ -70,26 +76,32 @@ public class MessageController {
 					  BindingResult bindingResult,
 			          Model model, 
 			          @RequestParam("file") MultipartFile file) throws IOException {
+		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
+		model.addAttribute("pages", page);
+		model.addAttribute("url", "/allMessages");
 		if(user.getActivationCode() != null) {
 			model.addAttribute("activationCodeError", "You have not activated account, pleace check your Email");
 			return "allMessages";
 		}
-		message.setAuthor(user);
+		if(user != null) {
+			message.setAuthor(user);
+		}
 		if (bindingResult.hasErrors()) {
+			System.out.println("11");
 			Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
 			model.addAllAttributes(errorsMap);
 			model.addAttribute("message", message);
 		} else {
+			System.out.println("22");
 			fileService.saveFile(message, file);
 			model.addAttribute("message", null);
 			messageRepo.save(message);
 		} 
 		if(StringUtils.isEmpty(message.getTag())) {
-			message.setTag("no tag");
+			message.setTag("noTag");
 		}
-		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
-		model.addAttribute("pages", page);
-		return bindingResult.hasErrors() ? "/allMessages" : "redirect:/allMessages";
+		model.addAttribute("filter", filter);
+		return "allMessages";
 	}
 	
 	@GetMapping("/messages/{message}/like")

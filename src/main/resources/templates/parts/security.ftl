@@ -11,14 +11,19 @@
         isAdmin = user.isAdmin()
         isActive = user.isActive()
         currentUserId = user.getId()
+        gest = false
     >
 <#else>
     <#assign
+		isMessagesPage = springMacroRequestContext.requestUri?contains("/allMessages")
         isRegistrationPage = springMacroRequestContext.requestUri?contains("/registration")
         mail = "unknovn@what"
         name = "Gest"
         isAdmin = false
         isActive = false
         currentUserId = -1
+        isCurrentUser = false
+        isSubscriber = false
+        gest = true
     >
 </#if>

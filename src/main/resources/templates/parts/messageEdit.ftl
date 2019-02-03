@@ -5,7 +5,7 @@
 		<a class="alert-link" href="user/accountSettings">${activationCodeError}</a>
 	</div>
 </#if>
-<#if message?? || isMessagesPage>
+<#if (message?? || isMessagesPage) && !gest>
 <a class="btn btn-primary mb-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
 	<#if isMessagesPage>
     	New message
@@ -55,7 +55,7 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							<div class="modal-body">are you sure you want to delete this message?</div>
+							<div class="modal-body">Are you sure you want to delete this message?</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 								<button type="submit" name="button" value="delete" class="btn btn-primary">delete</button>

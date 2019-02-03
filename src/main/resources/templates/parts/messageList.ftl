@@ -14,11 +14,14 @@
 			<div class="row">
 				<a class="col align-self-center" href="/profile/${message.author.id}">${message.authorName}</a> 
 				<a class="col align-self-center" href="/messages/${message.id}/like">
-					<#if message.meLiked> 
-						<i class="fas fa-heart"></i> 
+					<#if !gest>
+						<#if message.meLiked> 
+							<i class="fas fa-heart"></i> 
+						<#else> <i class="far fa-heart"></i>
+						</#if> 
 					<#else>
 						<i class="far fa-heart"></i>
-					</#if> 
+					</#if>
 					${message.likes}
 				</a>
 				<#if message.author.id== currentUserId> 

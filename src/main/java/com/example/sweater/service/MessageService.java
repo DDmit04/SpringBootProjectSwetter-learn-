@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.sweater.domain.User;
 import com.example.sweater.domain.dto.MessageDto;
+import com.example.sweater.domain.dto.GestMessageDto;
 import com.example.sweater.repos.MessageRepo;
 
 @Service
@@ -24,7 +25,7 @@ public class MessageService {
 			return messageRepo.findAll(pageable, user);
 		}
 	}
-	
+
 	public Page<MessageDto> messageSub(Pageable pageable, User user) {
 		Page<MessageDto> page = messageRepo.findAll(pageable, user);
 		Iterator<MessageDto> iterator = page.iterator();
@@ -36,9 +37,21 @@ public class MessageService {
 		}
 		return page;
 	}
-	
+
 	public Page<MessageDto> messageListForUser(Pageable pageable, User currentUser, User author) {
-        return messageRepo.findByAuthor(pageable, author, currentUser);
-    }
+		return messageRepo.findByAuthor(pageable, author, currentUser);
+	}
+
+	public Page<GestMessageDto> messageListForGest(Pageable pageable, String filter) {
+		if (filter != null && !filter.isEmpty()) {
+			return messageRepo.findByTag(filter, pageable);
+		} else {
+			return messageRepo.findAll(pageable);
+		}
+	}
 	
+	public Page<GestMessageDto> messageListForGestProfile(Pageable pageable, User author) {
+		return messageRepo.findByAuthor(pageable, author);
+	}
+
 }

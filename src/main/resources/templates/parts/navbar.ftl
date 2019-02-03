@@ -12,23 +12,23 @@
             <li class="nav-item">
                 <a class="nav-link" href="/home">Home</a>
             </li>
-            <#if user?? && !isRegistrationPage>
             <li class="nav-item">
                 <a class="nav-link" href="/allMessages">All Messages</a>
             </li>
+            <#if !gest && !isRegistrationPage>
             <li class="nav-item">
                 <a class="nav-link" href="/profile/${currentUserId}">My profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/user/subMessages/${user.id}">My Subscriptions</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/accountSettings">Settings</a>
+            </li>
             </#if>
             <#if isAdmin>
             <li class="nav-item">
                 <a class="nav-link" href="/user">User list</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/user/accountSettings">Settings</a>
             </li>
             </#if>
         </ul>
@@ -36,7 +36,7 @@
         <#if name != "Gest">
         	<@l.logout />
         <#else>
-       	 	<a class="btn btn-primary" href="/main">Sign in</a>
+       	 	<a class="btn btn-primary" href="/login">Sign in</a>
         </#if>
     </div>
 </nav>
