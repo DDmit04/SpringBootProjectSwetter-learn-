@@ -1,7 +1,5 @@
 package com.example.sweater.controller;
 
-import java.util.Iterator;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,17 +12,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
-import com.example.sweater.repos.MessageRepo;
+import com.example.sweater.domain.dto.MessageDto;
+import com.example.sweater.service.MessageService;
 import com.example.sweater.service.UserSevice;
 
 @Controller
 @RequestMapping("/user")
 public class SubscribsionsController {
-
+	
 	@Autowired
-	private MessageRepo messageRepo;
+	private MessageService messageService;
 
 	@Autowired
 	private UserSevice userSevice;
@@ -65,14 +63,7 @@ public class SubscribsionsController {
 			@PathVariable User user,
 			@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable, 
 			Model model) {
-		Page<Message> page = messageRepo.findAll(pageable);
-		Iterator<Message> iterator = page.iterator();
-		while (iterator.hasNext()) {
-			Message message = iterator.next();
-			if (!user.getSubscriptions().contains(message.getAuthor())) {
-				iterator.remove();
-			}
-		}
+		Page<MessageDto> page = messageService.messageSub(pageable, user);
 		model.addAttribute("url", user.getId());
 		model.addAttribute("pages", page);
 		return "subscriptionsMessages";

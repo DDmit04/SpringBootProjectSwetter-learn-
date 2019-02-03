@@ -21,14 +21,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
+import com.example.sweater.domain.dto.MessageDto;
 import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.FileService;
+import com.example.sweater.service.MessageService;
 
 @Controller
 public class MessageEditController {
 	
 	@Autowired
 	private MessageRepo messageRepo;
+	
+	@Autowired
+	private MessageService messageService;
 	
 	@Autowired
 	private FileService fileService;
@@ -41,7 +46,7 @@ public class MessageEditController {
 			   				   @ModelAttribute("redirectMessageTypeName") String redirectMessageType,
 							   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 							   Model model) {
-		Page<Message> page = messageRepo.findByAuthor(user, pageable);
+		Page<MessageDto> page = messageService.messageListForUser(pageable, currentUser, user);
 		model.addAttribute("message", message);
 		model.addAttribute("userChannel", user);
 		model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
