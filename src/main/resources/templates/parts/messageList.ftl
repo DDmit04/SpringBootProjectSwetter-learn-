@@ -12,18 +12,22 @@
         </div>
 		<div class="card-footer text-muted container">
 			<div class="row">
-				<a class="col align-self-center" href="/profile/${message.author.id}">${message.authorName}</a> 
-				<a class="col align-self-center" href="/messages/${message.id}/like">
-					<#if !gest>
-						<#if message.meLiked> 
-							<i class="fas fa-heart"></i> 
-						<#else> <i class="far fa-heart"></i>
-						</#if> 
-					<#else>
+				<a class="col align-self-center" href="/profile/${message.author.id}!1">${message.authorName}</a>
+				<#if !gest> 
+					<a class="col align-self-center" href="/messages/${message.id}/like">
+							<#if message.meLiked> 
+								<i class="fas fa-heart"></i> 
+							<#else> 
+								<i class="far fa-heart"></i>
+							</#if> 
+						${message.likes}
+					</a>
+				<#else>
+					<div class="col align-self-center">
 						<i class="far fa-heart"></i>
-					</#if>
-					${message.likes}
-				</a>
+						${message.likes}
+					</div>
+				</#if>
 				<#if message.author.id== currentUserId> 
 					<a class="col btn btn-primary" href="/profile/${message.author.id}?message=${message.id}">
 						Edit 
