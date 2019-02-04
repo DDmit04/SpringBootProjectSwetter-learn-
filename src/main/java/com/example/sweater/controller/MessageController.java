@@ -2,8 +2,8 @@ package com.example.sweater.controller;
 
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
-import com.example.sweater.domain.dto.MessageDto;
 import com.example.sweater.domain.dto.GestMessageDto;
+import com.example.sweater.domain.dto.MessageDto;
 import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.FileService;
 import com.example.sweater.service.MessageService;
@@ -56,14 +56,20 @@ public class MessageController {
 					   @RequestParam(required = false, defaultValue = "") String filter, 
 					   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 			           Model model) {
-		if(user != null) {
-			Page<MessageDto> page = messageService.messageList(pageable, filter, user);
-			model.addAttribute("pages", page);
-		} else {
-			Page<GestMessageDto> pageGest = messageService.messageListForGest(pageable, filter);
-			model.addAttribute("pages", pageGest);
-		}
+		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
+		model.addAttribute("pages", page);
 		model.addAttribute("url", "/allMessages");
+		model.addAttribute("filter", filter);
+		return "allMessages";
+	}
+	
+	@GetMapping("/allMessagesGest")
+	public String mainGest(@RequestParam(required = false, defaultValue = "") String filter, 
+					   	   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
+			               Model model) {
+		Page<GestMessageDto> pageGest = messageService.messageListForGest(pageable, filter);
+		model.addAttribute("pages", pageGest);
+		model.addAttribute("url", "/allMessagesGest");
 		model.addAttribute("filter", filter);
 		return "allMessages";
 	}
@@ -72,27 +78,21 @@ public class MessageController {
 	public String add(@AuthenticationPrincipal User user, 
 					  @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 					  @RequestParam(required = false, defaultValue = "") String filter, 
+					  @RequestParam String button,
 					  @Valid Message message, 
 					  BindingResult bindingResult,
 			          Model model, 
 			          @RequestParam("file") MultipartFile file) throws IOException {
-		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
-		model.addAttribute("pages", page);
-		model.addAttribute("url", "/allMessages");
 		if(user.getActivationCode() != null) {
 			model.addAttribute("activationCodeError", "You have not activated account, pleace check your Email");
 			return "allMessages";
 		}
-		if(user != null) {
-			message.setAuthor(user);
-		}
-		if (bindingResult.hasErrors()) {
-			System.out.println("11");
+		message.setAuthor(user);
+		if (bindingResult.hasErrors()) {			
 			Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
 			model.addAllAttributes(errorsMap);
 			model.addAttribute("message", message);
 		} else {
-			System.out.println("22");
 			fileService.saveFile(message, file);
 			model.addAttribute("message", null);
 			messageRepo.save(message);
@@ -101,7 +101,10 @@ public class MessageController {
 			message.setTag("noTag");
 		}
 		model.addAttribute("filter", filter);
-		return "allMessages";
+		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
+		model.addAttribute("pages", page);
+		model.addAttribute("url", "/allMessages");
+		return bindingResult.hasErrors() ? "/allMessages" : "redirect:/allMessages";
 	}
 	
 	@GetMapping("/messages/{message}/like")

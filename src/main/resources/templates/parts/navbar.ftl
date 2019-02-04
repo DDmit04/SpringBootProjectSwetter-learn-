@@ -12,10 +12,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="/home">Home</a>
             </li>
+            <#if gest>
+            	<li class="nav-item">
+                	<a class="nav-link" href="/allMessagesGest">All Messages</a>
+            	</li>
+            </#if>
+            <#if !gest && !isRegistrationPage>
             <li class="nav-item">
                 <a class="nav-link" href="/allMessages">All Messages</a>
             </li>
-            <#if !gest && !isRegistrationPage>
             <li class="nav-item">
                 <a class="nav-link" href="/profile/${currentUserId}">My profile</a>
             </li>

@@ -35,7 +35,6 @@
                 </div>
             </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}" />
-            <input type="hidden" name="id" value="<#if message??>${message}</#if>" />
             <div class="form-group">
                 <button type="submit" name="button" value="edit" class="btn btn-primary">
 					<#if isMessagesPage>

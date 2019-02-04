@@ -8,7 +8,7 @@
         </#if>
         <div class="m-2">
             <span>${message.text}</span><br>
-            <i><a href="/allMessages?filter=${message.tag}">#${message.tag}</a></i>
+            <i><a href="<#if gest>/allMessagesGest<#else>/allMessages</#if>?filter=${message.tag}">#${message.tag}</a></i>
         </div>
 		<div class="card-footer text-muted container">
 			<div class="row">
