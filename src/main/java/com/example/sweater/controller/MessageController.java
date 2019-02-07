@@ -2,7 +2,6 @@ package com.example.sweater.controller;
 
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
-import com.example.sweater.domain.dto.GestMessageDto;
 import com.example.sweater.domain.dto.MessageDto;
 import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.FileService;
@@ -56,20 +55,14 @@ public class MessageController {
 					   @RequestParam(required = false, defaultValue = "") String filter, 
 					   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 			           Model model) {
-		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
+		Page<MessageDto> page;
+		if(user != null) {
+			page = messageService.messageList(pageable, filter, user);
+		} else {
+			page = messageService.messageListForGest(pageable, filter);
+		}
 		model.addAttribute("pages", page);
 		model.addAttribute("url", "/allMessages");
-		model.addAttribute("filter", filter);
-		return "allMessages";
-	}
-	
-	@GetMapping("/allMessagesGest")
-	public String mainGest(@RequestParam(required = false, defaultValue = "") String filter, 
-					   	   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
-			               Model model) {
-		Page<GestMessageDto> pageGest = messageService.messageListForGest(pageable, filter);
-		model.addAttribute("pages", pageGest);
-		model.addAttribute("url", "/allMessagesGest");
 		model.addAttribute("filter", filter);
 		return "allMessages";
 	}

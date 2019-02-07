@@ -8,18 +8,19 @@
         </#if>
         <div class="m-2">
             <span>${message.text}</span><br>
-            <i><a href="<#if gest>/allMessagesGest<#else>/allMessages</#if>?filter=${message.tag}">#${message.tag}</a></i>
+            <i><a href="/allMessages?filter=${message.tag}">#${message.tag}</a></i>
         </div>
 		<div class="card-footer text-muted container">
 			<div class="row">
-				<a class="col align-self-center" href="/profile/${message.author.id}!1">${message.authorName}</a>
+				<a class="col align-self-center" href="comments/${message.id}">comment</a>
+				<a class="col align-self-center" href="/profile/${message.author.id}">${message.authorName}</a>
 				<#if !gest> 
 					<a class="col align-self-center" href="/messages/${message.id}/like">
-							<#if message.meLiked> 
-								<i class="fas fa-heart"></i> 
-							<#else> 
-								<i class="far fa-heart"></i>
-							</#if> 
+						<#if message.meLiked> 
+							<i class="fas fa-heart"></i> 
+						<#else> 
+							<i class="far fa-heart"></i>
+						</#if> 
 						${message.likes}
 					</a>
 				<#else>

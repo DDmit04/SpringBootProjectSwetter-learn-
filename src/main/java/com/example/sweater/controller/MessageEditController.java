@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
 import com.example.sweater.domain.dto.MessageDto;
-import com.example.sweater.domain.dto.GestMessageDto;
 import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.FileService;
 import com.example.sweater.service.MessageService;
@@ -53,7 +52,7 @@ public class MessageEditController {
 			model.addAttribute("pages", page);
 			model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser));
 		} else {
-			Page<GestMessageDto> page = messageService.messageListForGestProfile(pageable, user);
+			Page<MessageDto> page = messageService.messageListForGestProfile(pageable, user);
 			model.addAttribute("pages", page);
 		}
 		model.addAttribute("message", message);

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
 import com.example.sweater.domain.dto.MessageDto;
-import com.example.sweater.domain.dto.GestMessageDto;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,32 +48,32 @@ public interface MessageRepo extends CrudRepository<Message, Long> {
     							  @Param("author") User author, 
     							  @Param("user") User user);
     
-    @Query("select new com.example.sweater.domain.dto.GestMessageDto(" +
+    @Query("select new com.example.sweater.domain.dto.MessageDto(" +
             "   m, " +
             "   count(ml) " +
             ") " +
             "from Message m left join m.likes ml " +
             "where m.tag = :tag " +
             "group by m")
-    Page<GestMessageDto> findByTag(@Param("tag") String tag, 
+    Page<MessageDto> findByTag(@Param("tag") String tag, 
     						   Pageable pageable);
 
-    @Query("select new com.example.sweater.domain.dto.GestMessageDto(" +
+    @Query("select new com.example.sweater.domain.dto.MessageDto(" +
             "   m, " +
             "   count(ml) " +
             ") " +
             "from Message m left join m.likes ml " +
             "group by m")
-    Page<GestMessageDto> findAll(Pageable pageable);
+    Page<MessageDto> findAll(Pageable pageable);
     
-    @Query("select new com.example.sweater.domain.dto.GestMessageDto(" +
+    @Query("select new com.example.sweater.domain.dto.MessageDto(" +
             "   m, " +
             "   count(ml) " +
             ") " +
             "from Message m left join m.likes ml " +
             "where m.author = :author " +
             "group by m")
-    Page<GestMessageDto> findByAuthor(Pageable pageable, 
+    Page<MessageDto> findByAuthor(Pageable pageable, 
     							  @Param("author") User author);
     
 }

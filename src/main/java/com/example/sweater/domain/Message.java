@@ -12,6 +12,7 @@ import com.example.sweater.domain.utill.MessageHelper;
 
 @Entity
 public class Message {
+	
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
@@ -33,6 +34,13 @@ public class Message {
     		inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private Set<User> likes = new HashSet<User>();
+    
+    
+    @OneToMany(mappedBy = "commentAuthor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Comment> comments;
+    
+    
+    
     
     private String filename;
 

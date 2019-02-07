@@ -23,6 +23,14 @@ public class MessageDto {
 		this.likes = likes;
 		this.meLiked = meLiked;
 	}
+	public MessageDto(Message message, Long likes) {
+		this.id = message.getId();
+		this.text = message.getText();
+		this.tag = message.getTag();
+		this.author = message.getAuthor();
+		this.filename = message.getFilename();
+		this.likes = likes;
+	}
 	public String getAuthorName() {
     	return MessageHelper.getAuthorName(author);
     }
