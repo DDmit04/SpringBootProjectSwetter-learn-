@@ -12,7 +12,11 @@
         </div>
 		<div class="card-footer text-muted container">
 			<div class="row">
-				<a class="col align-self-center" href="comments/${message.id}">comment</a>
+				<#if !isComment>
+					<a class="col align-self-center" href="comments/${message.id}">
+						<i class="far fa-comment"></i>
+					</a>
+				</#if>
 				<a class="col align-self-center" href="/profile/${message.author.id}">${message.authorName}</a>
 				<#if !gest> 
 					<a class="col align-self-center" href="/messages/${message.id}/like">

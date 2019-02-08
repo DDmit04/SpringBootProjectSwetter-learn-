@@ -1,22 +1,23 @@
 <#assign
     known = Session.SPRING_SECURITY_CONTEXT??
+    isMessagesPage = springMacroRequestContext.requestUri?contains("/allMessages")
+    isRegistrationPage = springMacroRequestContext.requestUri?contains("/registration")
+    isComment = springMacroRequestContext.requestUri?contains("/comments")
 >
 
 <#if known>
     <#assign
-        isMessagesPage = springMacroRequestContext.requestUri?contains("/allMessages")
-		isRegistrationPage = springMacroRequestContext.requestUri?contains("/registration")
         user = Session.SPRING_SECURITY_CONTEXT.authentication.principal
         name = user.getUsername()
         isAdmin = user.isAdmin()
         isActive = user.isActive()
         currentUserId = user.getId()
         gest = false
+        mail = user.getEmail()
     >
 <#else>
     <#assign
-		isMessagesPage = springMacroRequestContext.requestUri?contains("/allMessages")
-        isRegistrationPage = springMacroRequestContext.requestUri?contains("/registration")
+		
         mail = "unknovn@what"
         name = "Gest"
         isAdmin = false

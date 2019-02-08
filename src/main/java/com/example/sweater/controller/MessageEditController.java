@@ -61,7 +61,7 @@ public class MessageEditController {
 		model.addAttribute("subscribersCount", user.getSubscribers().size());
 		model.addAttribute("redirectMessage", redirectMessage);
 		model.addAttribute("redirectMessageType", redirectMessageType);
-		model.addAttribute("url", "/user-messages/" + user.getId());
+		model.addAttribute("url", "/profile/" + user.getId());
 		return "userMessages";
 	}
 	

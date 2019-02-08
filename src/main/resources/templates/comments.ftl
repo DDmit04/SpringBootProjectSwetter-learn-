@@ -6,6 +6,8 @@
 
 <#include "parts/CommentList.ftl" />
 
-<#include "parts/addComment.ftl">
+<#if !gest>
+	<#include "parts/addComment.ftl">
+</#if>
 
 </@c.page>
