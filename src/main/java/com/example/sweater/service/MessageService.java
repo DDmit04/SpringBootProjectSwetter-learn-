@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.sweater.domain.User;
 import com.example.sweater.domain.dto.MessageDto;
-import com.example.sweater.domain.dto.GestMessageDto;
 import com.example.sweater.repos.MessageRepo;
 
 @Service
@@ -42,7 +41,7 @@ public class MessageService {
 		return messageRepo.findByAuthor(pageable, author, currentUser);
 	}
 
-	public Page<GestMessageDto> messageListForGest(Pageable pageable, String filter) {
+	public Page<MessageDto> messageListForGest(Pageable pageable, String filter) {
 		if (filter != null && !filter.isEmpty()) {
 			return messageRepo.findByTag(filter, pageable);
 		} else {
@@ -50,7 +49,7 @@ public class MessageService {
 		}
 	}
 	
-	public Page<GestMessageDto> messageListForGestProfile(Pageable pageable, User author) {
+	public Page<MessageDto> messageListForGestProfile(Pageable pageable, User author) {
 		return messageRepo.findByAuthor(pageable, author);
 	}
 

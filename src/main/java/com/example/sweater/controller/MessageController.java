@@ -2,7 +2,6 @@ package com.example.sweater.controller;
 
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
-import com.example.sweater.domain.dto.GestMessageDto;
 import com.example.sweater.domain.dto.MessageDto;
 import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.FileService;
@@ -67,7 +66,7 @@ public class MessageController {
 	public String mainGest(@RequestParam(required = false, defaultValue = "") String filter, 
 					   	   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 			               Model model) {
-		Page<GestMessageDto> pageGest = messageService.messageListForGest(pageable, filter);
+		Page<MessageDto> pageGest = messageService.messageListForGest(pageable, filter);
 		model.addAttribute("pages", pageGest);
 		model.addAttribute("url", "/allMessagesGest");
 		model.addAttribute("filter", filter);
