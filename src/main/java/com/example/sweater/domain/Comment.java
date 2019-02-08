@@ -24,15 +24,15 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "message_id")
-    private User commentAuthor;
+    private Message commentedMaessage;
 
     public Comment() {
     }
-	public Comment(Long id, String text, User commentAuthor) {
+	public Comment(Long id, String text, Message commentedMaessage) {
 		super();
 		this.id = id;
 		this.text = text;
-		this.commentAuthor = commentAuthor;
+		this.commentedMaessage = commentedMaessage;
 	}
 	public Long getId() {
 		return id;
@@ -46,11 +46,10 @@ public class Comment {
 	public void setText(String text) {
 		this.text = text;
 	}
-	public User getCommentAuthor() {
-		return commentAuthor;
+	public Message getCommentedMaessage() {
+		return commentedMaessage;
 	}
-	public void setCommentAuthor(User commentAuthor) {
-		this.commentAuthor = commentAuthor;
+	public void setCommentedMaessage(Message commentedMaessage) {
+		this.commentedMaessage = commentedMaessage;
 	}
-    
 }

@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface MessageRepo extends CrudRepository<Message, Long> {
-
+	
 	@Query("select new com.example.sweater.domain.dto.MessageDto(" +
             "   m, " +
             "   count(ml), " +

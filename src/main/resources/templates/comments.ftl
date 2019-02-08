@@ -4,8 +4,8 @@
 
 <@c.page>
 
-<!-- <@p.pager url pages /> -->
 <#include "parts/CommentList.ftl" />
-<!-- <@p.pager url pages /> -->
+
+<#include "parts/addComment.ftl">
 
 </@c.page>

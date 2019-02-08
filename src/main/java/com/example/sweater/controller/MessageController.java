@@ -71,7 +71,6 @@ public class MessageController {
 	public String add(@AuthenticationPrincipal User user, 
 					  @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 					  @RequestParam(required = false, defaultValue = "") String filter, 
-					  @RequestParam String button,
 					  @Valid Message message, 
 					  BindingResult bindingResult,
 			          Model model, 

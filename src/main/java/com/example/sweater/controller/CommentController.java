@@ -21,36 +21,49 @@ import com.example.sweater.domain.Comment;
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
 import com.example.sweater.repos.CommentRepo;
+import com.example.sweater.repos.MessageRepo;
+import com.example.sweater.service.CommentService;
 
 @Controller
 @RequestMapping("/comments")
 public class CommentController {
 	
 	@Autowired
+	private CommentService commentService;
+	
+	@Autowired
 	private CommentRepo commentRepo;
+	
+	@Autowired
+	private MessageRepo messageRepo;
 
 	@GetMapping("{message}")
 	public String comments(
-			   @PathVariable Long message,
+			   @PathVariable Message message,
 			   @AuthenticationPrincipal User user, 
 			   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 	           Model model) {
-		Iterable<Comment> page = commentRepo.findAll();
+		Iterable<Comment> page = commentService.commentList(message);
+		model.addAttribute("message", message);
 		model.addAttribute("comments", page);
 		model.addAttribute("url", message);
 		return "comments";
 	}
 	
-//	@PostMapping("{message}/comments")
-//	public String addComment(@PathVariable Message message, 
-//							 @AuthenticationPrincipal User user, 
-//							 @Valid Comment comment, 
-//							 BindingResult bindingResult,
-//					         Model model, 
-//							 String text) {
-//		comment.setCommentAuthor(user);
-//		commentRepo.save(comment);
-//		return "commentList";
-//	}
+	@PostMapping("{message}")
+	public String addComment(@PathVariable Message message, 
+							 @AuthenticationPrincipal User user, 
+							 @Valid Comment comment, 
+							 BindingResult bindingResult,
+					         Model model) {
+		comment.setCommentedMaessage(message);
+		commentRepo.save(comment);
+		Iterable<Comment> page = commentService.commentList(message);
+		model.addAttribute("message", message);
+		model.addAttribute("comment", comment);
+		model.addAttribute("comments", page);
+		model.addAttribute("url", message);
+		return "comments";
+	}
 	
 }

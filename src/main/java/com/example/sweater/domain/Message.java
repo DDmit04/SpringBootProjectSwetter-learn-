@@ -35,12 +35,8 @@ public class Message {
     )
     private Set<User> likes = new HashSet<User>();
     
-    
-    @OneToMany(mappedBy = "commentAuthor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "commentedMaessage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Comment> comments;
-    
-    
-    
     
     private String filename;
 
