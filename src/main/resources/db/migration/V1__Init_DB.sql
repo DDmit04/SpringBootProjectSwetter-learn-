@@ -1,12 +1,5 @@
 create sequence hibernate_sequence start 1 increment 1;
 
-create table comment (
-	id int8 not null, 
-	text varchar(2048), 
-	message_id int8, 
-	primary key (id)
-);
-
 create table message (
     id int8 not null,
     filename varchar(255),
