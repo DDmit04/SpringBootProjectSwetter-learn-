@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.sweater.domain.Comment;
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
+import com.example.sweater.domain.dto.CommentDto;
 import com.example.sweater.domain.dto.MessageDto;
 import com.example.sweater.repos.CommentRepo;
 import com.example.sweater.repos.MessageRepo;
@@ -44,10 +45,11 @@ public class CommentController {
 			   @AuthenticationPrincipal User user, 
 			   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 	           Model model) {
-		Page<MessageDto> messageForComment = messageRepo.findOne(pageable, user, message.getId()); 
-		Iterable<Comment> page = commentService.commentList(message);
-		model.addAttribute("pages", messageForComment);
-		model.addAttribute("comments", page);
+		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
+		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
+		model.addAttribute("pages", commentedMessage);
+		model.addAttribute("commentCount", message.getComments().size());
+		model.addAttribute("comments", commentsPage);
 		model.addAttribute("url", message);
 		return "comments";
 	}
@@ -59,13 +61,15 @@ public class CommentController {
 							 BindingResult bindingResult,
 							 @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 					         Model model) {
-		comment.setCommentedMaessage(message);
+		comment.setCommentedMessage(message);
+		comment.setCommentAuthor(user);
 		commentRepo.save(comment);
-		Page<MessageDto> messageForComment = messageRepo.findOne(pageable, user, message.getId()); 
-		Iterable<Comment> page = commentService.commentList(message);
-		model.addAttribute("pages", messageForComment);
+		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
+		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
+		model.addAttribute("pages", commentedMessage);
 		model.addAttribute("comment", comment);
-		model.addAttribute("comments", page);
+		model.addAttribute("comments", commentsPage);
+		model.addAttribute("commentCount", message.getComments().size());
 		model.addAttribute("url", message);
 		return "comments";
 	}

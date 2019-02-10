@@ -13,8 +13,9 @@
 		<div class="card-footer text-muted container">
 			<div class="row">
 				<#if !isComment>
-					<a class="col align-self-center" href="comments/${message.id}">
+					<a class="col align-self-center" href="/comments/${message.id}">
 						<i class="far fa-comment"></i>
+						${message.comments}
 					</a>
 				</#if>
 				<a class="col align-self-center" href="/profile/${message.author.id}">${message.authorName}</a>
@@ -33,7 +34,7 @@
 						${message.likes}
 					</div>
 				</#if>
-				<#if message.author.id== currentUserId> 
+				<#if message.author.id == currentUserId> 
 					<a class="col btn btn-primary" href="/profile/${message.author.id}?message=${message.id}">
 						Edit 
 					</a> 

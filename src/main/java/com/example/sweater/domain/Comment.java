@@ -21,18 +21,21 @@ public class Comment {
     @NotBlank(message = "Pleace fill the message")
     @Length(max = 2048, message = "Message too long(more then 2KB)")
     private String text;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User commentAuthor;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "message_id")
-    private Message commentedMaessage;
+    private Message commentedMessage;
 
     public Comment() {
     }
-	public Comment(Long id, String text, Message commentedMaessage) {
-		super();
+	public Comment(Long id, String text, Message commentedMessage) {
 		this.id = id;
 		this.text = text;
-		this.commentedMaessage = commentedMaessage;
+		this.commentedMessage = commentedMessage;
 	}
 	public Long getId() {
 		return id;
@@ -46,10 +49,16 @@ public class Comment {
 	public void setText(String text) {
 		this.text = text;
 	}
-	public Message getCommentedMaessage() {
-		return commentedMaessage;
+	public Message getCommentedMessage() {
+		return commentedMessage;
 	}
-	public void setCommentedMaessage(Message commentedMaessage) {
-		this.commentedMaessage = commentedMaessage;
+	public void setCommentedMessage(Message commentedMessage) {
+		this.commentedMessage = commentedMessage;
+	}
+	public User getCommentAuthor() {
+		return commentAuthor;
+	}
+	public void setCommentAuthor(User commentAuthor) {
+		this.commentAuthor = commentAuthor;
 	}
 }

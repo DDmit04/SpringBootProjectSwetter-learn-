@@ -6,6 +6,7 @@
 
 <#include "parts/CommentList.ftl" />
 
+<hr class="my-3">
 <#if !gest>
 	<#include "parts/addComment.ftl">
 </#if>

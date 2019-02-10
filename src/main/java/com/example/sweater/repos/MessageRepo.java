@@ -41,7 +41,7 @@ public interface MessageRepo extends CrudRepository<Message, Long> {
             "   count(ml), " +
             "   sum(case when ml = :user then 1 else 0 end) > 0" +
             ") " +
-            "from Message m left join m.likes ml " +
+            "from Message m left join m.likes ml  " +
             "where m.tag = :tag " +
             "group by m")
     Page<MessageDto> findByTag(@Param("tag") String tag, 
@@ -74,7 +74,7 @@ public interface MessageRepo extends CrudRepository<Message, Long> {
             "   m, " +
             "   count(ml) " +
             ") " +
-            "from Message m left join m.likes ml " +
+            "from Message m left join m.likes ml "+
             "group by m")
     Page<MessageDto> findAll(Pageable pageable);
     

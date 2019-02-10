@@ -42,6 +42,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Message> messages ;
     
+    @OneToMany(mappedBy = "commentAuthor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Comment> comments ;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_subscriptions",
@@ -159,5 +162,10 @@ public class User implements UserDetails {
 	public void setPasswordResetCode(String passwordResetCode) {
 		this.passwordResetCode = passwordResetCode;
 	}
-	
+	public Set<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
 }
