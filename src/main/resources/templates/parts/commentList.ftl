@@ -1,5 +1,4 @@
 <#include "security.ftl">
-<#include "messageList.ftl">
 
 <div>Comments(${commentCount}):</div>
 <hr class="my-2">
@@ -12,6 +11,11 @@
 		<div class="card-footer text-muted container">
 			<div class="row">
 		    	<span> ${comment.text}</span><br>
+		    	<div class="col">
+		    		<#if comment.commentAuthor.id == currentUserId && !isCommentEdit>
+		    			<a href="${url.id}/edit/${comment.id}">edit</a>
+		    		</#if>
+		    	</div>
 			</div>
 		</div>
 	</div>

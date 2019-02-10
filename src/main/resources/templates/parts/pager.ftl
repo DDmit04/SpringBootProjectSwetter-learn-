@@ -1,6 +1,6 @@
-<#macro pager url pages>
+<#macro pager url messagesPage>
 
-<#if pages.getTotalPages() gt 7>
+<#if messagesPage.getTotalPages() gt 7>
 	<#assign
 		totalPages = pages.getTotalPages()
 		pageNumber = pages.getNumber() + 1
@@ -12,7 +12,7 @@
 	>
 <#else>
 	<#assign
-		body = 1..pages.getTotalPages()
+		body = 1..messagesPage.getTotalPages()
 	>
 </#if>
 <div class="container mt-3">
@@ -21,8 +21,8 @@
 			<li class="page-item disabled">
 				<a class="page-link" href="#" tabindex="-1">Pages</a>
 			</li>
-			<#list 1..pages.getTotalPages() as p> 
-			<#if p - 1 == pages.getNumber()>
+			<#list 1..messagesPage.getTotalPages() as p> 
+			<#if p - 1 == messagesPage.getNumber()>
 				<li class="page-item active">
 					<a class="page-link" href="#" tabindex="-1">${p}</a>
 				</li>
@@ -32,7 +32,7 @@
 				</li>
 			<#else>
 				<li class="page-item">
-					<a class="page-link" href="${url}?page=${p - 1}&size=${pages.getSize()}" tabindex="-1">${p}</a>
+					<a class="page-link" href="${url}?page=${p - 1}&size=${messagesPage.getSize()}" tabindex="-1">${p}</a>
 				</li>
 			</#if>
 			</#list>
@@ -43,13 +43,13 @@
 				<a class="page-link" href="#" tabindex="-1">Elemens on pages</a>
 			</li>
 			<#list [5, 10, 25, 50] as c> 
-			<#if c == pages.getSize()>
+			<#if c == messagesPage.getSize()>
 				<li class="page-item active">
 					<a class="page-link" href="#" tabindex="-1">${c}</a>
 				</li>
 			<#else>
 				<li class="page-item">
-					<a class="page-link" href="${url}?page=${pages.getNumber()}&size=${c}" tabindex="-1">${c}</a>
+					<a class="page-link" href="${url}?page=${messagesPage.getNumber()}&size=${c}" tabindex="-1">${c}</a>
 				</li>
 			</#if>
 			</#list>

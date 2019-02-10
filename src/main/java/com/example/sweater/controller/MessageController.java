@@ -55,13 +55,13 @@ public class MessageController {
 					   @RequestParam(required = false, defaultValue = "") String filter, 
 					   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 			           Model model) {
-		Page<MessageDto> page;
+		Page<MessageDto> messagePage;
 		if(user != null) {
-			page = messageService.messageList(pageable, filter, user);
+			messagePage = messageService.messageList(pageable, filter, user);
 		} else {
-			page = messageService.messageListForGest(pageable, filter);
+			messagePage = messageService.messageListForGest(pageable, filter);
 		}
-		model.addAttribute("pages", page);
+		model.addAttribute("messagesPage", messagePage);
 		model.addAttribute("url", "/allMessages");
 		model.addAttribute("filter", filter);
 		return "allMessages";
@@ -93,8 +93,8 @@ public class MessageController {
 			message.setTag("noTag");
 		}
 		model.addAttribute("filter", filter);
-		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
-		model.addAttribute("pages", page);
+		Page<MessageDto> messagePage = messageService.messageList(pageable, filter, user);
+		model.addAttribute("messagesPage", messagePage);
 		model.addAttribute("url", "/allMessages");
 		return bindingResult.hasErrors() ? "/allMessages" : "redirect:/allMessages";
 	}

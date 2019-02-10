@@ -3,6 +3,7 @@
     isMessagesPage = springMacroRequestContext.requestUri?contains("/allMessages")
     isRegistrationPage = springMacroRequestContext.requestUri?contains("/registration")
     isComment = springMacroRequestContext.requestUri?contains("/comments")
+    isCommentEdit = springMacroRequestContext.requestUri?contains("/edit")
 >
 
 <#if known>
@@ -13,7 +14,7 @@
         isActive = user.isActive()
         currentUserId = user.getId()
         gest = false
-        mail = user.getEmail()
+<!--         mail = user.getEmail() -->
     >
 <#else>
     <#assign

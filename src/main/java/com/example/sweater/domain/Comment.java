@@ -18,7 +18,7 @@ public class Comment {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    @NotBlank(message = "Pleace fill the message")
+    @NotBlank(message = "comment can not be emty!")
     @Length(max = 2048, message = "Message too long(more then 2KB)")
     private String text;
     

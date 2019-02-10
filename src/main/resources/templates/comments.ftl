@@ -4,11 +4,14 @@
 
 <@c.page>
 
+<#include "parts/messageList.ftl">
+
 <#include "parts/CommentList.ftl" />
+<@p.pager url messagesPage />
 
 <hr class="my-3">
 <#if !gest>
-	<#include "parts/addComment.ftl">
+	<#include "parts/CommentEdit.ftl">
 </#if>
 
 </@c.page>

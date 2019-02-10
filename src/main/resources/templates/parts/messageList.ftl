@@ -1,7 +1,7 @@
 <#include "security.ftl">
 
 <div class="card-columns">
-    <#list pages.content as message>
+    <#list messagesPage.content as message>
     <div class="card my-3">
         <#if message.filename??>
         <img src="/img/${message.filename}" class="card-img-top">
