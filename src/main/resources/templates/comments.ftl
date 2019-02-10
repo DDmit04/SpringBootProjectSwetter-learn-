@@ -7,9 +7,12 @@
 <#include "parts/messageList.ftl">
 
 <#include "parts/CommentList.ftl" />
-<@p.pager url messagesPage />
+<#if !isCommentEdit>
+	<@p.pager url messagesPage />
+</#if>
 
 <hr class="my-3">
+
 <#if !gest>
 	<#include "parts/CommentEdit.ftl">
 </#if>

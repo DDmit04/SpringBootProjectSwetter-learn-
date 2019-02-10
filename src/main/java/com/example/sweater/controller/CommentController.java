@@ -55,7 +55,7 @@ public class CommentController {
 		model.addAttribute("messagesPage", commentedMessage);
 		model.addAttribute("commentCount", message.getComments().size());
 		model.addAttribute("comments", commentsPage);
-		model.addAttribute("url", message);
+		model.addAttribute("url", message.getId());
 		return "comments";
 	}
 	
@@ -71,7 +71,7 @@ public class CommentController {
 		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
 		model.addAttribute("comments", commentsPage);
 		model.addAttribute("commentCount", message.getComments().size());
-		model.addAttribute("url", message);
+		model.addAttribute("url", message.getId());
 		if(bindingResult.hasErrors()) {
 			Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
 			model.addAllAttributes(errorsMap);
@@ -93,10 +93,12 @@ public class CommentController {
 	           Model model) {
 		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
 		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
+		model.addAttribute("comment", comment);
+		model.addAttribute("message", message);
 		model.addAttribute("messagesPage", commentedMessage);
 		model.addAttribute("commentCount", message.getComments().size());
 		model.addAttribute("comments", commentsPage);
-		model.addAttribute("url", message);
+		model.addAttribute("url", message.getId() + "/edit/" + comment.getId());
 		return "comments";
 	}
 	
@@ -108,12 +110,13 @@ public class CommentController {
 			 				  @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 			 				  Model model) {
 		model.addAttribute("comment", comment);
+		model.addAttribute("message", message);
 		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
 		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
 		model.addAttribute("messagesPage", commentedMessage);
 		model.addAttribute("commentCount", message.getComments().size());
 		model.addAttribute("comments", commentsPage);
-		model.addAttribute("url", message);
+		model.addAttribute("url", message.getId() + "/edit/" + comment.getId());
 		if(StringUtils.isEmpty(text) || text.equals(" ")) {
 			model.addAttribute("textError", "comment can not be emty!");
 			return "comments";
