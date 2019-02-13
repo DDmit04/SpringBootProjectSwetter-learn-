@@ -12,6 +12,21 @@
 			<div class="row ml-1">
 		    	<div class="text-dark">${comment.text}</div><br>
 		    	<div class="col">
+			    	<#if !gest> 
+						<a class="col align-self-center <#if comment.mePlused>text-success</#if>" href="/comments/${comment.id}/plus">
+							<#if comment.mePlused> 
+								<i class="fas fa-plus text-success"></i> 
+							<#else> 
+								<i class="fas fa-plus"></i>
+							</#if> 
+							${comment.pluses}
+						</a>
+					<#else>
+						<div class="col align-self-center">
+							<i class="far fa-plus"></i>
+							${comment.pluses}
+						</div>
+					</#if>
 		    	</div>
 		    	<div class="col">
 		    	</div>

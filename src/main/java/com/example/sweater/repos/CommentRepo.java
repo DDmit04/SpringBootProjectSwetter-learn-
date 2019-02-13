@@ -9,16 +9,19 @@ import org.springframework.data.domain.Pageable;
 
 import com.example.sweater.domain.Comment;
 import com.example.sweater.domain.Message;
+import com.example.sweater.domain.User;
 import com.example.sweater.domain.dto.CommentDto;
 
 public interface CommentRepo extends CrudRepository<Comment, Long> {
 
 	@Query("select new com.example.sweater.domain.dto.CommentDto(" +
-		   "  c " +
+		   "  c, " +
+		   "  count(cp), " +
+		   "  sum(case when cp = :user then 1 else 0 end) > 0" + 
 		   ") " +
-		   "from Comment c " +
+		   "from Comment c left join c.commentPluses cp " +
 		   "where c.commentedMessage = :commentedMessage " + 
 		   "group by c")
-	Page<CommentDto> findBycommentedMessage(Pageable pageable, @Param("commentedMessage") Message commentedMessage);
+	Page<CommentDto> findBycommentedMessage(Pageable pageable, @Param("commentedMessage") Message commentedMessage,  @Param("user") User user);
 	
 }

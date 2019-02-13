@@ -14,7 +14,6 @@
 
 <#include "parts/messageEdit.ftl" />
 
-<@p.pager url messagesPage />
 <#include "parts/messageList.ftl" />
 <@p.pager url messagesPage />
 

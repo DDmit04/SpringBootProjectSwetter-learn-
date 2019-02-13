@@ -60,7 +60,6 @@ public class User implements UserDetails {
             inverseJoinColumns = { @JoinColumn(name = "channel_id") }
     )
     private Set<User> subscriptions = new HashSet<>();
-    
 
     @Override
 	public boolean equals(Object obj) {

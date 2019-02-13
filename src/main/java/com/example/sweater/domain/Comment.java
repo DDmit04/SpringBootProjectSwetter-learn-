@@ -1,11 +1,16 @@
 package com.example.sweater.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
@@ -29,7 +34,15 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "message_id")
     private Message commentedMessage;
-
+    
+    @ManyToMany
+    @JoinTable(
+    		name = "comment_pluses",
+    		joinColumns = {@JoinColumn(name = "comment_id")},
+    		inverseJoinColumns = {@JoinColumn(name = "user_id")} 
+    )
+    private Set<User> commentPluses = new HashSet<User>();
+    
     public Comment() {
     }
 	public Comment(Long id, String text, Message commentedMessage) {
@@ -60,5 +73,11 @@ public class Comment {
 	}
 	public void setCommentAuthor(User commentAuthor) {
 		this.commentAuthor = commentAuthor;
+	}
+	public Set<User> getCommentPluses() {
+		return commentPluses;
+	}
+	public void setCommentPluses(Set<User> commentPluses) {
+		this.commentPluses = commentPluses;
 	}
 }

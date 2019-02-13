@@ -1,6 +1,7 @@
 package com.example.sweater.controller;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.sweater.domain.Comment;
 import com.example.sweater.domain.Message;
@@ -30,8 +34,6 @@ import com.example.sweater.domain.dto.MessageDto;
 import com.example.sweater.repos.CommentRepo;
 import com.example.sweater.repos.MessageRepo;
 import com.example.sweater.service.CommentService;
-
-import freemarker.template.utility.StringUtil;
 
 @Controller
 @RequestMapping("/comments")
@@ -55,7 +57,7 @@ public class CommentController {
  			   @ModelAttribute("redirectMessageTypeName") String redirectMessageType,
 	           Model model) {
 		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
-		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
+		Page<CommentDto> commentsPage = commentService.commentList(pageable, message, user);
 		model.addAttribute("redirectMessage", redirectMessage);
 		model.addAttribute("redirectMessageType", redirectMessageType);
 		model.addAttribute("messagesPage", commentedMessage);
@@ -73,7 +75,7 @@ public class CommentController {
 					         Model model) {
 		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
 		model.addAttribute("messagesPage", commentedMessage);
-		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
+		Page<CommentDto> commentsPage = commentService.commentList(pageable, message, user);
 		model.addAttribute("comments", commentsPage);
 		model.addAttribute("commentCount", message.getComments().size());
 		if(bindingResult.hasErrors()) {
@@ -96,7 +98,7 @@ public class CommentController {
 			   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 	           Model model) {
 		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
-		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
+		Page<CommentDto> commentsPage = commentService.commentList(pageable, message, user);
 		model.addAttribute("comment", comment);
 		model.addAttribute("message", message);
 		model.addAttribute("messagesPage", commentedMessage);
@@ -119,7 +121,7 @@ public class CommentController {
 		model.addAttribute("comment", comment);
 		model.addAttribute("message", message);
 		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
-		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
+		Page<CommentDto> commentsPage = commentService.commentList(pageable, message, user);
 		model.addAttribute("messagesPage", commentedMessage);
 		model.addAttribute("commentCount", message.getComments().size());
 		model.addAttribute("comments", commentsPage);
@@ -129,6 +131,10 @@ public class CommentController {
 				return "comments";
 			} else {
 				comment.setText(text);
+				redirectMessage = "Comment edited!";
+				redirectMessageType = "success";
+				redirectAttributes.addFlashAttribute("redirectMessageTypeName", redirectMessageType);
+				redirectAttributes.addFlashAttribute("redirectMessageName", redirectMessage);
 			}
 		}
 		if(button.equals("delete")) {
@@ -140,6 +146,25 @@ public class CommentController {
 			redirectAttributes.addFlashAttribute("redirectMessageName", redirectMessage);
 		}
 		return "redirect:/comments/" + message.getId();
+	}
+	
+	@GetMapping("/{comment}/plus")
+	public String plus(
+					   @AuthenticationPrincipal User user, 
+					   @PathVariable Comment comment,
+					   RedirectAttributes redirectAttributes,
+					   @RequestHeader(required = false) String referer) {
+		Set<User> pluses = comment.getCommentPluses();
+		if(pluses.contains(user)) {
+			pluses.remove(user);
+		} else {
+			pluses.add(user);
+		}
+		UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
+		components.getQueryParams()
+			.entrySet()
+			.forEach(pair -> redirectAttributes.addAttribute(pair.getKey(), pair.getValue()));
+		return "redirect:" + components.getPath();
 	}
 	
 }
