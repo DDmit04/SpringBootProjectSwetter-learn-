@@ -8,11 +8,13 @@
 		</div>
 	</div>
 	<input type="hidden" name="_csrf" value="${_csrf.token}" />
-	<button class="btn btn-primary" type="submit">
+	<button class="btn btn-primary" type="submit" value="edit" name="button">
 		<#if isCommentEdit>
 			edit
 		<#else>
 			add
 		</#if>
-	</button>
+	<#if isCommentEdit>
+		<button class="btn btn-primary ml-2" type="submit" value="delete" name="button">delete</button>
+	</#if>
 </form>

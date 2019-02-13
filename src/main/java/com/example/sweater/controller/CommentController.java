@@ -15,10 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.sweater.domain.Comment;
 import com.example.sweater.domain.Message;
@@ -49,13 +51,16 @@ public class CommentController {
 			   @PathVariable Message message,
 			   @AuthenticationPrincipal User user, 
 			   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
+			   @ModelAttribute("redirectMessageName") String redirectMessage,
+ 			   @ModelAttribute("redirectMessageTypeName") String redirectMessageType,
 	           Model model) {
 		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
 		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
+		model.addAttribute("redirectMessage", redirectMessage);
+		model.addAttribute("redirectMessageType", redirectMessageType);
 		model.addAttribute("messagesPage", commentedMessage);
 		model.addAttribute("commentCount", message.getComments().size());
 		model.addAttribute("comments", commentsPage);
-		model.addAttribute("url", message.getId());
 		return "comments";
 	}
 	
@@ -71,7 +76,6 @@ public class CommentController {
 		Page<CommentDto> commentsPage = commentService.commentList(pageable, message);
 		model.addAttribute("comments", commentsPage);
 		model.addAttribute("commentCount", message.getComments().size());
-		model.addAttribute("url", message.getId());
 		if(bindingResult.hasErrors()) {
 			Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
 			model.addAllAttributes(errorsMap);
@@ -81,7 +85,7 @@ public class CommentController {
 			comment.setCommentAuthor(user);
 			commentRepo.save(comment);
 		}
-		return "comments";
+		return "redirect:/comments/" + message.getId();
 	}
 	
 	@GetMapping("/{message}/edit/{comment}")
@@ -98,17 +102,20 @@ public class CommentController {
 		model.addAttribute("messagesPage", commentedMessage);
 		model.addAttribute("commentCount", message.getComments().size());
 		model.addAttribute("comments", commentsPage);
-		model.addAttribute("url", message.getId() + "/edit/" + comment.getId());
 		return "comments";
 	}
 	
 	@PostMapping("/{message}/edit/{comment}")
-	public String editComment(@PathVariable Message message, 
-							  @PathVariable Comment comment,
-							  @RequestParam String text,
-			 				  @AuthenticationPrincipal User user, 
-			 				  @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
-			 				  Model model) {
+	public String editComments(@PathVariable Message message, 
+							   @PathVariable Comment comment,
+							   @RequestParam String text,
+							   @RequestParam (required = false) String button,
+			 				   @AuthenticationPrincipal User user, 
+			 				   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
+			 				   @ModelAttribute("redirectMessageName") String redirectMessage,
+			 				   @ModelAttribute("redirectMessageTypeName") String redirectMessageType,
+			   				   RedirectAttributes redirectAttributes,
+			 				   Model model) {
 		model.addAttribute("comment", comment);
 		model.addAttribute("message", message);
 		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
@@ -116,12 +123,21 @@ public class CommentController {
 		model.addAttribute("messagesPage", commentedMessage);
 		model.addAttribute("commentCount", message.getComments().size());
 		model.addAttribute("comments", commentsPage);
-		model.addAttribute("url", message.getId() + "/edit/" + comment.getId());
-		if(StringUtils.isEmpty(text) || text.equals(" ")) {
-			model.addAttribute("textError", "comment can not be emty!");
-			return "comments";
-		} else {
-			comment.setText(text);
+		if(button.equals("edit")) {
+			if(StringUtils.isEmpty(text) || text.equals(" ")) {
+				model.addAttribute("textError", "comment can not be emty!");
+				return "comments";
+			} else {
+				comment.setText(text);
+			}
+		}
+		if(button.equals("delete")) {
+			commentRepo.delete(comment);
+			message.getComments().remove(comment);
+			redirectMessage = "Comment deleted!";
+			redirectMessageType = "success";
+			redirectAttributes.addFlashAttribute("redirectMessageTypeName", redirectMessageType);
+			redirectAttributes.addFlashAttribute("redirectMessageName", redirectMessage);
 		}
 		return "redirect:/comments/" + message.getId();
 	}

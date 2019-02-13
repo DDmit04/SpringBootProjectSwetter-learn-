@@ -6,9 +6,12 @@
 
 <#include "parts/messageList.ftl">
 
+<#if redirectMessage?? && redirectMessage != "">
+    <div class="alert alert-${redirectMessageType}" role="alert">${redirectMessage}</div>
+</#if>
+
 <#include "parts/CommentList.ftl" />
-<#if !isCommentEdit>
-	<@p.pager url messagesPage />
+	<#if !isCommentEdit>
 </#if>
 
 <hr class="my-3">

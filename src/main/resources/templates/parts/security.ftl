@@ -14,7 +14,7 @@
         isActive = user.isActive()
         currentUserId = user.getId()
         gest = false
-<!--         mail = user.getEmail() -->
+		mail = user.getEmail()
     >
 <#else>
     <#assign

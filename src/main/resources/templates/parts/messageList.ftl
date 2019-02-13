@@ -2,7 +2,7 @@
 
 <div class="card-columns">
     <#list messagesPage.content as message>
-    <div class="card my-3 <#if message.author.id == currentUserId>border-success</#if>">
+    <div class="card my-3">
         <#if message.filename??>
         <img src="/img/${message.filename}" class="card-img-top">
         </#if>

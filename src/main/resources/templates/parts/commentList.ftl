@@ -4,7 +4,7 @@
 <hr class="my-2">
 <div class="card-columns">
     <#list comments.content as comment>
-    <div class="card my-2 <#if comment.commentAuthor.id == currentUserId>border-success</#if>">
+    <div class="card my-2">
         <div class="m-1">
         	<a class="col" href="/profile/${comment.commentAuthor.id}">${comment.commentAuthor.username}</a>
         </div>
