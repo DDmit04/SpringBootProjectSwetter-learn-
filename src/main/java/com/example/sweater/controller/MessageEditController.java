@@ -46,22 +46,22 @@ public class MessageEditController {
 			   				   @ModelAttribute("redirectMessageTypeName") String redirectMessageType,
 							   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 							   Model model) {
+		Page<MessageDto> messagePage;
 		if(currentUser != null) {
-			Page<MessageDto> page = messageService.messageListForUser(pageable, currentUser, user);
+			messagePage = messageService.messageListForUser(pageable, currentUser, user);
 			model.addAttribute("isCurrentUser", currentUser.equals(user));
-			model.addAttribute("pages", page);
 			model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser));
 		} else {
-			Page<MessageDto> page = messageService.messageListForGestProfile(pageable, user);
-			model.addAttribute("pages", page);
+			messagePage = messageService.messageListForGestProfile(pageable, user);
 		}
+		model.addAttribute("messagesPage", messagePage);
 		model.addAttribute("message", message);
 		model.addAttribute("userChannel", user);
 		model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
 		model.addAttribute("subscribersCount", user.getSubscribers().size());
 		model.addAttribute("redirectMessage", redirectMessage);
 		model.addAttribute("redirectMessageType", redirectMessageType);
-		model.addAttribute("url", "/user-messages/" + user.getId());
+		model.addAttribute("url", "/profile/" + user.getId());
 		return "userMessages";
 	}
 	

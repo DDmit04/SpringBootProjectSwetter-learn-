@@ -63,9 +63,9 @@ public class SubscribsionsController {
 			@PathVariable User user,
 			@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable, 
 			Model model) {
-		Page<MessageDto> page = messageService.messageSub(pageable, user);
+		Page<MessageDto> messagePage = messageService.messageSub(pageable, user);
 		model.addAttribute("url", user.getId());
-		model.addAttribute("pages", page);
+		model.addAttribute("messagesPage", messagePage);
 		return "subscriptionsMessages";
 	}
 

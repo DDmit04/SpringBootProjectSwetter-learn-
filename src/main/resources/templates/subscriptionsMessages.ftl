@@ -3,8 +3,7 @@
 
 <@c.page>
 
-<@p.pager url pages />
 <#include "parts/messageList.ftl" />
-<@p.pager url pages />
+<@p.pager url messagesPage />
 
 </@c.page>

@@ -55,29 +55,22 @@ public class MessageController {
 					   @RequestParam(required = false, defaultValue = "") String filter, 
 					   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 			           Model model) {
-		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
-		model.addAttribute("pages", page);
+		Page<MessageDto> messagePage;
+		if(user != null) {
+			messagePage = messageService.messageList(pageable, filter, user);
+		} else {
+			messagePage = messageService.messageListForGest(pageable, filter);
+		}
+		model.addAttribute("messagesPage", messagePage);
 		model.addAttribute("url", "/allMessages");
 		model.addAttribute("filter", filter);
 		return "allMessages";
 	}
 	
-	@GetMapping("/allMessagesGest")
-	public String mainGest(@RequestParam(required = false, defaultValue = "") String filter, 
-					   	   @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
-			               Model model) {
-		Page<MessageDto> pageGest = messageService.messageListForGest(pageable, filter);
-		model.addAttribute("pages", pageGest);
-		model.addAttribute("url", "/allMessagesGest");
-		model.addAttribute("filter", filter);
-		return "allMessages";
-	}
-
 	@PostMapping("/allMessages")
 	public String add(@AuthenticationPrincipal User user, 
 					  @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC)Pageable pageable,
 					  @RequestParam(required = false, defaultValue = "") String filter, 
-					  @RequestParam String button,
 					  @Valid Message message, 
 					  BindingResult bindingResult,
 			          Model model, 
@@ -100,8 +93,8 @@ public class MessageController {
 			message.setTag("noTag");
 		}
 		model.addAttribute("filter", filter);
-		Page<MessageDto> page = messageService.messageList(pageable, filter, user);
-		model.addAttribute("pages", page);
+		Page<MessageDto> messagePage = messageService.messageList(pageable, filter, user);
+		model.addAttribute("messagesPage", messagePage);
 		model.addAttribute("url", "/allMessages");
 		return bindingResult.hasErrors() ? "/allMessages" : "redirect:/allMessages";
 	}

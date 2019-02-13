@@ -12,6 +12,7 @@ public class MessageDto {
     private User author;    
     private String filename;
     private Long likes;
+    private Long comments;
     private boolean meLiked;
     
 	public MessageDto(Message message, Long likes, boolean meLiked) {
@@ -21,6 +22,7 @@ public class MessageDto {
 		this.author = message.getAuthor();
 		this.filename = message.getFilename();
 		this.likes = likes;
+		this.comments = (long) message.getComments().size();
 		this.meLiked = meLiked;
 	}
 	public MessageDto(Message message, Long likes) {
@@ -30,6 +32,7 @@ public class MessageDto {
 		this.author = message.getAuthor();
 		this.filename = message.getFilename();
 		this.likes = likes;
+		this.comments = (long) message.getComments().size();
 	}
 	public String getAuthorName() {
     	return MessageHelper.getAuthorName(author);
@@ -59,5 +62,7 @@ public class MessageDto {
 	public String toString() {
 		return "MessageDto [id=" + id + ", author=" + author + ", likes=" + likes + ", meLiked=" + meLiked + "]";
 	}
-	
+	public Long getComments() {
+		return comments;
+	}
 }
