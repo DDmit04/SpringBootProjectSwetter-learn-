@@ -23,7 +23,7 @@
 						</a>
 					<#else>
 						<div class="col align-self-center">
-							<i class="far fa-plus"></i>
+							<i class="fas fa-plus"></i>
 							${comment.pluses}
 						</div>
 					</#if>

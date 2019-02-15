@@ -118,7 +118,6 @@ public class CommentController {
 			 				   @ModelAttribute("redirectMessageTypeName") String redirectMessageType,
 			   				   RedirectAttributes redirectAttributes,
 			 				   Model model) {
-		model.addAttribute("comment", comment);
 		model.addAttribute("message", message);
 		Page<MessageDto> commentedMessage = messageRepo.findOne(pageable, user, message.getId()); 
 		Page<CommentDto> commentsPage = commentService.commentList(pageable, message, user);
